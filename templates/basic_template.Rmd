@@ -50,6 +50,7 @@ Template for a basic bespoke mantis report. Shows the data in multiple orientati
 Report generated on: `r format(Sys.Date(), format = '%d %b %Y')`
 </p>
 
+<!-- initialise a tabset at the top level, otherwise tabs generated below will not render -->
 # {.tabset .tabset-pills}
 
 
@@ -111,6 +112,7 @@ mantis::bespoke_rmd_tab_group(
 ```
 
 
+<!-- specify a tabset at each manually-added level that expects child tabs, otherwise child tabs will not render -->
 ## Manual tab with child tabs {.tabset .tabset-pills}
 
 ### Extra nesting {.tabset .tabset-pills}
