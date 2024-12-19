@@ -1,0 +1,157 @@
+---
+title: "Bespoke mantis report - basic"
+output: html_document
+params:
+  df: df
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(comment = NA)
+knitr::opts_chunk$set(rownames.print = FALSE)
+```
+
+```{css, echo=FALSE}
+h1.title {
+	font-size: 28px;
+	}
+p.compact {
+	margin-bottom: 0px;
+	margin-top: 0px;
+	}
+```
+
+```{js}
+// this chunk is necessary when using outputspec_interactive(). 
+// when the browser window is resized, all dygraphs on inactive tabs disappear. Reload page to redraw them all.
+window.onresize = function(){ location.reload(); }
+```
+
+```{r settings}
+
+# reassign for convenience when testing
+df <- params$df
+
+# Set a specific order for the antibiotic values if desired. 
+# Values not specified will be appended alphabetically.
+# Values not in data will be ignored
+abx_order <- c("Coamoxiclav", "Ciprofloxacin")
+
+# Similarly, set a universal order for the location values if desired.
+location_order <- c("SITE1", "SITE2", "SITE3")
+
+```
+
+<p>
+Template for a basic bespoke mantis report. Shows the data in multiple orientations.
+</p>
+
+<p>
+Report generated on: `r format(Sys.Date(), format = '%d %b %Y')`
+</p>
+
+# {.tabset .tabset-pills}
+
+
+```{r single-tab, results='asis'}
+# create a single tab item
+
+mantis::bespoke_rmd_tab_item(
+  df = df |>
+    dplyr::group_by(PrescriptionDate, Location) |>
+    dplyr::summarise(
+      NumberOfPrescriptions = sum(NumberOfPrescriptions, na.rm = TRUE),
+      .groups = "drop"
+    ),
+  inputspec = mantis::inputspec(
+    timepoint_col = "PrescriptionDate",
+    item_col = "Location",
+    value_col = "NumberOfPrescriptions"
+  ),
+  outputspec = mantis::outputspec_interactive(
+    plot_value_type = "value",
+    plot_type = "bar",
+    item_label = "Location",
+    plot_label = "Total prescriptions over time",
+    sync_axis_range = TRUE,
+    item_order = abx_order
+  ),
+  fill_with_zero = TRUE,
+  tab_name = "Single tab item",
+  tab_level = 1
+)
+
+```
+
+```{r group-tab, results='asis'}
+# create a parent tab with a set of child tabs
+
+mantis::bespoke_rmd_tab_group(
+  df = df,
+  inputspec = mantis::inputspec(
+    timepoint_col = "PrescriptionDate",
+    item_col = "Antibiotic",
+    value_col = "NumberOfPrescriptions",
+    tab_col = "Location"
+  ),
+  outputspec = mantis::outputspec_interactive(
+    plot_value_type = "value",
+    plot_type = "bar",
+    item_label = "Antibiotic name",
+    plot_label = "Prescriptions over time",
+    sync_axis_range = FALSE,
+    item_order = abx_order
+  ),
+  fill_with_zero = FALSE,
+  tab_group_name = "Group of child tabs",
+  tab_group_level = 1,
+  tab_order = location_order
+)
+
+```
+
+
+## Manual tab with child tabs {.tabset .tabset-pills}
+
+### Extra nesting {.tabset .tabset-pills}
+
+```{r child-tabs, results='asis'}
+# create a set of tabs without creating the parent
+# do this by leaving out the tab_group_name
+
+mantis::bespoke_rmd_tab_group(
+  df = df |>
+    dplyr::group_by(PrescriptionDate, Location, Antibiotic) |>
+    dplyr::filter(!all(is.na(NumberOfPrescriptions))) |>
+    dplyr::ungroup(),
+  inputspec = mantis::inputspec(
+    timepoint_col = "PrescriptionDate",
+    item_col = "Antibiotic",
+    value_col = "NumberOfPrescriptions",
+    tab_col = "Location"
+  ),
+  outputspec = mantis::outputspec_interactive(
+    plot_value_type = "value",
+    plot_type = "bar",
+    item_label = "Antibiotic name",
+    plot_label = "Prescriptions over time",
+    sync_axis_range = FALSE,
+    item_order = abx_order
+  ),
+  fill_with_zero = FALSE,
+  tab_group_level = 2,
+  tab_order = location_order
+)
+
+```
+
+#### Extra manual tab
+
+Other content can be added as desired
+
+```{r initialise-widgets, results='asis'}
+# this chunk is necessary when using outputspec_interactive(). 
+# It ensures that the dygraphs render correctly
+mantis::bespoke_rmd_initialise_widgets(plot_type = "bar")
+```
+
