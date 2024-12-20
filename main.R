@@ -24,8 +24,8 @@ example_prescription_numbers <- mantis::example_prescription_numbers
 # GENERATE A BASIC REPORT
 
 rmarkdown::render(
-  input = "templates/basic_template.Rmd",
-  output_file = "basic_template", 
+  input = "templates/basic-template.Rmd",
+  output_file = "basic-template", 
   output_dir = save_directory,
   params = list(
     df = example_prescription_numbers

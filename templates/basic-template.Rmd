@@ -21,7 +21,7 @@ p.compact {
 	}
 ```
 
-```{js}
+```{js mantis-interactive}
 // this chunk is necessary when using outputspec_interactive(). 
 // when the browser window is resized, all dygraphs on inactive tabs disappear. Reload page to redraw them all.
 window.onresize = function(){ location.reload(); }
@@ -42,12 +42,12 @@ location_order <- c("SITE1", "SITE2", "SITE3")
 
 ```
 
-<p>
-Template for a basic bespoke mantis report. Shows the data in multiple orientations.
+<p class="compact">
+Report created on: `r Sys.time()`
 </p>
 
 <p>
-Report generated on: `r format(Sys.Date(), format = '%d %b %Y')`
+Template for a basic bespoke mantis report.
 </p>
 
 <!-- initialise a tabset at the top level, otherwise tabs generated below will not render -->
@@ -115,7 +115,7 @@ mantis::bespoke_rmd_tab_group(
 <!-- specify a tabset at each manually-added level that expects child tabs, otherwise child tabs will not render -->
 ## Manual tab with child tabs {.tabset .tabset-pills}
 
-### Extra nesting {.tabset .tabset-pills}
+### mantis content {.tabset .tabset-pills}
 
 ```{r child-tabs, results='asis'}
 # create a set of tabs without creating the parent
@@ -151,9 +151,15 @@ mantis::bespoke_rmd_tab_group(
 
 Other content can be added as desired
 
-```{r initialise-widgets, results='asis'}
+### Other content
+
+Other content can be added as desired
+
+
+```{r initialise-widgets}
 # this chunk is necessary when using outputspec_interactive(). 
-# It ensures that the dygraphs render correctly
+# it ensures that the dygraphs render when built using `cat()`
+# set the plot_type to the same plot_type as the real output
 mantis::bespoke_rmd_initialise_widgets(plot_type = "bar")
 ```
 
