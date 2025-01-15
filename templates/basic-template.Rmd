@@ -47,7 +47,7 @@ Report created on: `r Sys.time()`
 </p>
 
 <p>
-Template for a basic bespoke mantis report.
+Template for a basic bespoke mantis report. Uses mantis version 0.1.2.
 </p>
 
 <!-- initialise a tabset at the top level, otherwise tabs generated below will not render -->
