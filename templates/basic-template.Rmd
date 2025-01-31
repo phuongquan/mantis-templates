@@ -38,7 +38,7 @@ df <- params$df
 abx_order <- c("Coamoxiclav", "Ciprofloxacin")
 
 # Similarly, set a universal order for the location values if desired.
-location_order <- c("SITE1", "SITE2", "SITE3")
+location_reversed <- c("SITE3", "SITE2", "SITE1")
 
 ```
 
@@ -47,7 +47,7 @@ Report created on: `r Sys.time()`
 </p>
 
 <p>
-Template for a basic bespoke mantis report. Uses mantis version 0.1.2.
+Template for a basic bespoke mantis report. Uses current mantis development version.
 </p>
 
 <!-- initialise a tabset at the top level, otherwise tabs generated below will not render -->
@@ -55,9 +55,9 @@ Template for a basic bespoke mantis report. Uses mantis version 0.1.2.
 
 
 ```{r single-tab, results='asis'}
-# create a single tab item
+# create a single tab item including the tab itself
 
-mantis::bespoke_rmd_tab_item(
+mantis::bespoke_rmd_tab(
   df = df |>
     dplyr::group_by(PrescriptionDate, Location) |>
     dplyr::summarise(
@@ -70,12 +70,11 @@ mantis::bespoke_rmd_tab_item(
     value_col = "NumberOfPrescriptions"
   ),
   outputspec = mantis::outputspec_interactive(
-    plot_value_type = "value",
     plot_type = "bar",
-    item_label = "Location",
+    item_label = "Site",
     plot_label = "Total prescriptions over time",
     sync_axis_range = TRUE,
-    item_order = abx_order
+    item_order = list("Location" = TRUE)
   ),
   fill_with_zero = TRUE,
   tab_name = "Single tab item",
@@ -87,26 +86,24 @@ mantis::bespoke_rmd_tab_item(
 ```{r group-tab, results='asis'}
 # create a parent tab with a set of child tabs
 
-mantis::bespoke_rmd_tab_group(
+mantis::bespoke_rmd_tab(
   df = df,
   inputspec = mantis::inputspec(
     timepoint_col = "PrescriptionDate",
-    item_col = "Antibiotic",
+    item_col = c("Antibiotic", "Location"),
     value_col = "NumberOfPrescriptions",
     tab_col = "Location"
   ),
   outputspec = mantis::outputspec_interactive(
-    plot_value_type = "value",
     plot_type = "bar",
     item_label = "Antibiotic name",
     plot_label = "Prescriptions over time",
     sync_axis_range = FALSE,
-    item_order = abx_order
+    item_order = list("Antibiotic" = abx_order)
   ),
   fill_with_zero = FALSE,
-  tab_group_name = "Group of child tabs",
-  tab_group_level = 1,
-  tab_order = location_order
+  tab_name = "Group of child tabs",
+  tab_level = 1
 )
 
 ```
@@ -119,30 +116,28 @@ mantis::bespoke_rmd_tab_group(
 
 ```{r child-tabs, results='asis'}
 # create a set of tabs without creating the parent
-# do this by leaving out the tab_group_name
+# do this by leaving out the tab_name
 
-mantis::bespoke_rmd_tab_group(
+mantis::bespoke_rmd_tab(
   df = df |>
     dplyr::group_by(PrescriptionDate, Location, Antibiotic) |>
     dplyr::filter(!all(is.na(NumberOfPrescriptions))) |>
     dplyr::ungroup(),
   inputspec = mantis::inputspec(
     timepoint_col = "PrescriptionDate",
-    item_col = "Antibiotic",
+    item_col = c("Antibiotic", "Location"),
     value_col = "NumberOfPrescriptions",
     tab_col = "Location"
   ),
   outputspec = mantis::outputspec_interactive(
-    plot_value_type = "value",
     plot_type = "bar",
     item_label = "Antibiotic name",
     plot_label = "Prescriptions over time",
     sync_axis_range = FALSE,
-    item_order = abx_order
+    item_order = list("Location" = location_reversed, "Antibiotic" = abx_order)
   ),
   fill_with_zero = FALSE,
-  tab_group_level = 2,
-  tab_order = location_order
+  tab_level = 3
 )
 
 ```

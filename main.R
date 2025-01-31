@@ -6,7 +6,7 @@
 install.packages(c("remotes", "rmarkdown", "dplyr", "reactable"))
 
 # this version of mantis is used in the enclosed templates
-remotes::install_github("phuongquan/mantis@v0.1.2", upgrade = FALSE)
+remotes::install_github("phuongquan/mantis", upgrade = FALSE)
 
 save_directory <- "./output"
 
