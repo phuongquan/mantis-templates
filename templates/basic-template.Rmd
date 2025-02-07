@@ -57,7 +57,7 @@ Template for a basic bespoke mantis report. Uses current mantis development vers
 ```{r single-tab, results='asis'}
 # create a single tab item including the tab itself
 
-mantis::bespoke_rmd_tab(
+mantis::bespoke_rmd_output(
   df = df |>
     dplyr::group_by(PrescriptionDate, Location) |>
     dplyr::summarise(
@@ -86,7 +86,7 @@ mantis::bespoke_rmd_tab(
 ```{r group-tab, results='asis'}
 # create a parent tab with a set of child tabs
 
-mantis::bespoke_rmd_tab(
+mantis::bespoke_rmd_output(
   df = df,
   inputspec = mantis::inputspec(
     timepoint_col = "PrescriptionDate",
@@ -118,7 +118,7 @@ mantis::bespoke_rmd_tab(
 # create a set of tabs without creating the parent
 # do this by leaving out the tab_name
 
-mantis::bespoke_rmd_tab(
+mantis::bespoke_rmd_output(
   df = df |>
     dplyr::group_by(PrescriptionDate, Location, Antibiotic) |>
     dplyr::filter(!all(is.na(NumberOfPrescriptions))) |>
