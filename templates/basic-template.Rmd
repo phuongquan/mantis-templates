@@ -71,7 +71,7 @@ mantis::bespoke_rmd_output(
   ),
   outputspec = mantis::outputspec_interactive(
     plot_type = "bar",
-    item_label = "Site",
+    item_labels = c("Location" = "Site"),
     plot_label = "Total prescriptions over time",
     sync_axis_range = TRUE,
     item_order = list("Location" = TRUE)
@@ -96,7 +96,7 @@ mantis::bespoke_rmd_output(
   ),
   outputspec = mantis::outputspec_interactive(
     plot_type = "bar",
-    item_label = "Antibiotic name",
+    item_labels = c("Antibiotic" = "Antibiotic name"),
     plot_label = "Prescriptions over time",
     sync_axis_range = FALSE,
     item_order = list("Antibiotic" = abx_order)
@@ -131,7 +131,7 @@ mantis::bespoke_rmd_output(
   ),
   outputspec = mantis::outputspec_interactive(
     plot_type = "bar",
-    item_label = "Antibiotic name",
+    item_labels = c("Antibiotic" = "Antibiotic name"),
     plot_label = "Prescriptions over time",
     sync_axis_range = FALSE,
     item_order = list("Location" = location_reversed, "Antibiotic" = abx_order)
