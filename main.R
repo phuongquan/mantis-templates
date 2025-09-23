@@ -3,11 +3,8 @@
 #---------------------------------------------------
 # SETUP
 
-install.packages(c("remotes", "rmarkdown", "dplyr", "reactable"))
-
-# this version of mantis is used in the enclosed templates
-remotes::install_github("phuongquan/mantis@v0.2.0", upgrade = FALSE)
-
+install.packages("mantis")
+  
 save_directory <- "./output"
 
 if (!file.exists(save_directory)){
