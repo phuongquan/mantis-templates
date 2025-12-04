@@ -1,10 +1,8 @@
-# run this whole file to generate all the template reports
+# run this whole file to generate the template report
 
 #---------------------------------------------------
 # SETUP
 
-install.packages("mantis")
-  
 save_directory <- "./output"
 
 if (!file.exists(save_directory)){
